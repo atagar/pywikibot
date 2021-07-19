@@ -569,7 +569,6 @@ class ModuleDeprecationWrapper(types.ModuleType):
             module = sys.modules[module]
         super().__setattr__('_deprecated', {})
         super().__setattr__('_module', module)
-        self.__dict__.update(module.__dict__)
 
         if __debug__:
             sys.modules[module.__name__] = self
@@ -622,9 +621,6 @@ class ModuleDeprecationWrapper(types.ModuleType):
         if not warning_message:
             warning_message = _build_msg_string(
                 replacement_name, since).format('{0}.{1}', '{2}')
-        if hasattr(self, name):
-            # __getattr__ will only be invoked if self.<name> does not exist.
-            delattr(self, name)
         self._deprecated[name] = (
             replacement_name, replacement, warning_message, future_warning)
 
